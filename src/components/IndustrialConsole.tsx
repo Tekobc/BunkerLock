@@ -39,7 +39,7 @@ export default function IndustrialConsole({ prefilledSpec }: IndustrialConsolePr
       `• *Tipo de Obra:* ${projectType}\n` +
       `• *Detalle:*\n${specsNotes || "Deseo asesoramiento técnico"}`;
 
-    const url = `https://wa.me/5491100000000?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/5491124073143?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
 

@@ -11,7 +11,7 @@ export interface ArmorTierInfo {
   ballisticRating: string;
   en1627Class: string;
   attackResistanceMinutes: number;
-  basePriceUsd: number;
+  basePriceUsd?: number;
   description: string;
   coreMaterial: string;
   drillProofPlate: string;
@@ -27,7 +27,7 @@ export interface LockMechanismInfo {
   technology: string;
   boltsAction: string;
   powerSource: string;
-  priceDeltaUsd: number;
+  priceDeltaUsd?: number;
   description: string;
 }
 
@@ -39,7 +39,7 @@ export interface FinishInfo {
   material: string;
   visualClass: string;
   corrosionWarrantyYears: number;
-  priceDeltaUsd: number;
+  priceDeltaUsd?: number;
   description: string;
 }
 

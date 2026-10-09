@@ -40,23 +40,16 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
         (activeFinish.id === "armored_oak" ? 35 : activeFinish.id === "forged_graphite" ? 45 : 15)
     );
 
-    const basePrice = activeTier.basePriceUsd * areaMultiplier;
-    const lockPrice = activeLock.priceDeltaUsd;
-    const finishPrice = activeFinish.priceDeltaUsd;
-
-    const totalPriceUsd = Math.round(basePrice + lockPrice + finishPrice);
-
     return {
       totalWeight,
       thicknessMm: activeTier.thicknessMm,
       boltsCount: activeTier.boltsCount,
       resistanceMin: activeTier.attackResistanceMinutes,
-      totalPriceUsd,
     };
-  }, [activeTier, activeLock, activeFinish, widthCm, heightCm]);
+  }, [activeTier, activeFinish, widthCm, heightCm]);
 
   const summaryString = useMemo(() => {
-    return `BUNKERLOCK CONFIGURACIÓN: Nivel ${activeTier.level} (${activeTier.name}) | Cerradura: ${activeLock.name} | Acabado: ${activeFinish.name} | Medidas: ${widthCm}x${heightCm}cm | Peso: ${calculatedSpecs.totalWeight}kg | Estimado: USD $${calculatedSpecs.totalPriceUsd}`;
+    return `BUNKERLOCK CONFIGURACIÓN: Nivel ${activeTier.level} (${activeTier.name}) | Cerradura: ${activeLock.name} | Acabado: ${activeFinish.name} | Medidas: ${widthCm}x${heightCm}cm | Peso: ${calculatedSpecs.totalWeight}kg`;
   }, [activeTier, activeLock, activeFinish, widthCm, heightCm, calculatedSpecs]);
 
   const handleSelectLevel = (lvl: ArmorLevel) => {
@@ -88,9 +81,9 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
   const sendWhatsApp = () => {
     playTactileClick();
     const text = encodeURIComponent(
-      `Hola BunkerLock, deseo cotizar una puerta acorazada personalizada:\n\n• ${summaryString}\n\n¿Podrían contactarme para coordinar medidas?`
+      `Hola BunkerLock, deseo cotizar una puerta acorazada personalizada:\n\n• ${summaryString}\n\n¿Podrían contactarme para coordinar medidas y presupuesto?`
     );
-    window.open(`https://wa.me/5491100000000?text=${text}`, "_blank");
+    window.open(`https://wa.me/5491124073143?text=${text}`, "_blank");
   };
 
   return (
@@ -174,7 +167,7 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                       <span>{lock.name.split("&")[0]}</span>
                       {selectedLock === lock.id && <Check className="w-3.5 h-3.5 text-amber-400" />}
                     </div>
-                    <div className="text-[11px] text-amber-500 font-mono-tech font-medium">+USD ${lock.priceDeltaUsd}</div>
+                    <div className="text-[11px] text-amber-500 font-mono-tech font-medium">ALTA SEGURIDAD</div>
                   </button>
                 ))}
               </div>
@@ -296,16 +289,16 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                 </div>
               </div>
 
-              {/* Precio Estimado */}
+              {/* Presupuesto a Medida */}
               <div className="pt-2">
                 <div className="text-[11px] font-mono-tech text-slate-400 uppercase">
-                  PRESUPUESTO ESTIMADO
+                  COTIZACIÓN PERSONALIZADA
                 </div>
-                <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono-tech mt-1">
-                  USD ${calculatedSpecs.totalPriceUsd.toLocaleString()}
+                <div className="text-2xl font-bold text-white font-mono-tech mt-1">
+                  Presupuesto a Medida
                 </div>
-                <p className="text-xs text-slate-500 mt-1 font-mono-tech">
-                  Incluye herrajes de alta seguridad y fabricación a medida.
+                <p className="text-xs text-slate-400 mt-1 font-mono-tech">
+                  Fabricación personalizada según vano y nivel de blindaje solicitado.
                 </p>
               </div>
 

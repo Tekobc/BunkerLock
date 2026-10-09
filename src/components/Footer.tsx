@@ -103,8 +103,13 @@ export default function Footer() {
         <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between text-xs font-mono-tech text-slate-500 gap-4">
           <div>&copy; 2026 BUNKERLOCK SECURITY SYSTEMS. TODOS LOS DERECHOS RESERVADOS.</div>
           <div className="flex gap-4">
-            <a href="tel:+5491100000000" className="hover:text-slate-300 transition-colors">
-              +54 (11) 5482-BUNKER
+            <a
+              href="https://wa.me/5491124073143"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-amber-400 transition-colors"
+            >
+              WHATSAPP: +54 9 11 2407-3143
             </a>
             <span>&bull;</span>
             <a href="mailto:ingenieria@bunkerlock.com" className="hover:text-slate-300 transition-colors">

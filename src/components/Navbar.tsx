@@ -92,6 +92,16 @@ export default function Navbar() {
             </button>
 
             <a
+              href="https://wa.me/5491124073143"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => playTactileClick()}
+              className="text-xs font-mono-tech text-slate-300 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+            >
+              <span>WHATSAPP</span>
+            </a>
+
+            <a
               href="#consola"
               onClick={() => playTactileClick()}
               className="tactile-amber px-4 py-2 rounded-md text-xs font-bold tracking-wider uppercase flex items-center gap-1.5"

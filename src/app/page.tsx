@@ -44,6 +44,20 @@ export default function Home() {
 
       {/* Footer Industrial de Alta Resistencia */}
       <Footer />
+
+      {/* Botón Flotante de WhatsApp Directo */}
+      <a
+        href="https://wa.me/5491124073143"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Contactar por WhatsApp directo"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#12161f] hover:bg-[#181d28] border border-emerald-500/40 shadow-[0_8px_25px_rgba(0,0,0,0.8),0_0_15px_rgba(16,185,129,0.2)] text-white group transition-all duration-200"
+      >
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="text-xs font-mono-tech font-bold uppercase tracking-wider text-slate-200 group-hover:text-emerald-400 transition-colors">
+          WHATSAPP
+        </span>
+      </a>
     </div>
   );
 }
