@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { SECURITY_TESTS } from "@/data/testing";
-import { ShieldCheck, Flame, Hammer, Zap, Crosshair, Play, RotateCcw, AlertTriangle, CheckCircle } from "lucide-react";
+import { ShieldCheck, Play, RotateCcw } from "lucide-react";
 import { playTactileClick, playHeavyLatch, playBoltSlide } from "@/lib/sound";
 
 export default function ResistanceSimulator() {
@@ -43,7 +43,7 @@ export default function ResistanceSimulator() {
         setTestCompleted(true);
         playBoltSlide();
       }
-    }, 90);
+    }, 80);
   };
 
   const resetSimulation = () => {
@@ -54,33 +54,31 @@ export default function ResistanceSimulator() {
   };
 
   return (
-    <section id="ensayos" className="relative py-24 bg-[#0a0c10] border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="ensayos" className="relative py-28 bg-[#08090c] border-t border-white/[0.06]">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
         
-        {/* Cabecera */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono-tech text-xs uppercase mb-3">
+        {/* Cabecera Limpia */}
+        <div className="max-w-2xl mb-14">
+          <div className="inline-flex items-center gap-2 text-xs font-mono-tech uppercase text-amber-500 mb-3">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>LABORATORIO DE BALÍSTICA &bull; SIMULADOR DE IMPACTO</span>
+            <span>BANCO DE PRUEBAS BALÍSTICAS</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white font-heading">
-            ENSAYOS DESTRUCTIVOS &amp; NORMAS
+            ENSAYOS DE RESISTENCIA
           </h2>
-          <p className="mt-3 text-slate-400 text-sm sm:text-base">
-            Sometemos cada prototipo a los estándares de laboratorio más hostiles del mundo. Simule en tiempo real el comportamiento del blindaje frente a armamento militar y herramientas industriales.
+          <p className="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
+            Simulación interactiva de laboratorio frente a armamento militar de alto calibre y herramientas industriales.
           </p>
         </div>
 
-        {/* =========================================================
-            SIMULADOR INTERACTIVO
-           ========================================================= */}
+        {/* Layout Limpio en 2 Columnas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Selector de Ensayos (4 Columnas) */}
-          <div className="lg:col-span-4 space-y-3">
-            <div className="text-xs font-mono-tech uppercase text-slate-400 tracking-wider mb-2">
-              SELECCIONE EL PROTOCOLO DE TEST:
-            </div>
+          {/* Selector de Protocolo (4 Columnas) */}
+          <div className="lg:col-span-4 space-y-2.5">
+            <span className="block text-xs font-mono-tech uppercase text-slate-500 mb-3">
+              PROTOCOLO DE ENSAYO:
+            </span>
 
             {SECURITY_TESTS.map((test) => {
               const isActive = test.id === selectedTestId;
@@ -90,180 +88,116 @@ export default function ResistanceSimulator() {
                   onClick={() => handleSelectTest(test.id)}
                   className={`w-full p-4 rounded-xl border text-left transition-all cursor-pointer ${
                     isActive
-                      ? "bg-gradient-to-r from-[#252c38] to-[#171b22] border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
-                      : "bg-[#12151b] border-slate-800 hover:border-slate-700 text-slate-400"
+                      ? "bg-[#181c24] border-amber-500 text-white"
+                      : "bg-[#101217] border-white/[0.06] text-slate-400 hover:border-white/20"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono-tech font-bold uppercase text-amber-500">
-                      {test.standard.split("/")[0]}
-                    </span>
-                    {isActive && (
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
-                    )}
+                  <div className="text-[10px] font-mono-tech text-amber-500 font-bold uppercase">
+                    {test.standard.split("/")[0]}
                   </div>
-                  <div className="text-sm font-bold text-slate-100 mt-1 uppercase font-heading">
+                  <div className="text-sm font-bold text-white mt-1 uppercase font-heading">
                     {test.name}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1 truncate">
+                  <div className="text-xs text-slate-400 mt-1 truncate">
                     {test.threatLevel}
                   </div>
                 </button>
               );
             })}
-
-            {/* Cuadro de Sellos y Homologaciones Oficiales */}
-            <div className="plate-raised p-4 rounded-xl border border-slate-700/60 mt-6 text-xs font-mono-tech text-slate-400 space-y-2">
-              <div className="text-white font-bold uppercase flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
-                <span>CERTIFICACIONES OFICIALES VIGENTES</span>
-              </div>
-              <ul className="space-y-1 text-[11px] text-slate-400">
-                <li>&bull; UNE-EN 1627:2021 Grado 3, 4, 5 y 6</li>
-                <li>&bull; RENAR / ANMaC Balística Nivel RB3</li>
-                <li>&bull; CEN EN 1522 Clase FB4, FB6 y FB7</li>
-                <li>&bull; Resistencia al Fuego UNE-EN 1634-1 EI 120</li>
-              </ul>
-            </div>
           </div>
 
-          {/* Consola de Ensayo y Visualización (8 Columnas) */}
-          <div className="lg:col-span-8">
-            <div className="plate-raised p-6 sm:p-8 rounded-2xl border-2 border-slate-700 shadow-[0_20px_60px_rgba(0,0,0,0.9)] bg-gradient-to-b from-[#181d24] via-[#12151a] to-[#0c0e12]">
-              
-              {/* Barra superior de telemetría de laboratorio */}
-              <div className="flex flex-wrap items-center justify-between pb-4 border-b border-slate-700/80 gap-3">
-                <div className="flex items-center gap-2">
-                  <Crosshair className="w-4 h-4 text-amber-500" />
-                  <span className="text-xs font-mono-tech font-bold text-white uppercase">
-                    CÁMARA DE ENSAYO BALÍSTICO ACTIVA
-                  </span>
-                </div>
-                <div className="font-mono-tech text-xs text-slate-400">
-                  ESTÁNDAR: <strong className="text-amber-400">{currentTest.standard}</strong>
-                </div>
-              </div>
-
-              {/* Área Gráfica de Simulación y Disparo */}
-              <div className="my-6 p-6 rounded-xl bg-black/70 border border-slate-800 relative overflow-hidden min-h-[220px] flex flex-col justify-between">
-                
-                {/* Cuadrícula de coordenadas balísticas */}
-                <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] bg-[size:20px_20px] opacity-30 pointer-events-none" />
-
-                {/* Blanco / Punto de impacto central */}
-                <div className="relative z-10 flex flex-col items-center justify-center my-4">
-                  <div
-                    className={`relative w-28 h-28 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isRunningTest
-                        ? "border-rose-500 shadow-[0_0_40px_rgba(244,63,94,0.6)] animate-pulse"
-                        : testCompleted
-                        ? "border-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]"
-                        : "border-slate-700"
-                    }`}
-                  >
-                    <div className="w-16 h-16 rounded-full border border-dashed border-slate-600 flex items-center justify-center">
-                      <div
-                        className={`w-4 h-4 rounded-full ${
-                          isRunningTest
-                            ? "bg-rose-500 animate-ping"
-                            : testCompleted
-                            ? "bg-emerald-500"
-                            : "bg-amber-500"
-                        }`}
-                      />
-                    </div>
-
-                    {/* Efecto de chispas / impacto en ejecución */}
-                    {isRunningTest && (
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <span className="absolute w-32 h-1 bg-amber-400 shadow-[0_0_15px_#f59e0b] rotate-45 animate-ping" />
-                        <span className="absolute w-32 h-1 bg-rose-500 shadow-[0_0_15px_#ef4444] -rotate-45 animate-ping" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-3 font-mono-tech text-xs text-center">
-                    {isRunningTest ? (
-                      <span className="text-rose-400 font-bold tracking-wider animate-pulse">
-                        [ DETONACIÓN / CARGA DESTRUCTIVA APLICADA: {testProgress}% ]
-                      </span>
-                    ) : testCompleted ? (
-                      <span className="text-emerald-400 font-bold tracking-wider">
-                        [ ENSAYO FINALIZADO: IMPACTO DISIPADO CON ÉXITO ]
-                      </span>
-                    ) : (
-                      <span className="text-slate-400">
-                        [ SISTEMA LISTO PARA INICIAR PROTOCOLO ]
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Barra de progreso de carga destructiva */}
-                <div className="relative z-10 space-y-1">
-                  <div className="flex justify-between text-[11px] font-mono-tech text-slate-400">
-                    <span>ENERGÍA DEFORMADORA:</span>
-                    <span className="text-amber-400 font-bold">{testProgress}%</span>
-                  </div>
-                  <div className="w-full h-2 rounded bg-slate-800 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-amber-500 via-rose-500 to-emerald-500 transition-all duration-100"
-                      style={{ width: `${testProgress}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Parámetros Técnicos del Ensayo */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 font-mono-tech text-xs">
-                <div className="plate-sunken p-3 rounded">
-                  <div className="text-[10px] text-slate-500 uppercase">ARMAMENTO / CARGA</div>
-                  <div className="font-bold text-white mt-0.5 truncate">{currentTest.toolOrCaliber}</div>
-                </div>
-
-                <div className="plate-sunken p-3 rounded">
-                  <div className="text-[10px] text-slate-500 uppercase">ENERGÍA / VELOCIDAD</div>
-                  <div className="font-bold text-amber-400 mt-0.5">{currentTest.temperatureOrVelocity}</div>
-                </div>
-
-                <div className="plate-sunken p-3 rounded">
-                  <div className="text-[10px] text-slate-500 uppercase">RESULTADO OFICIAL</div>
-                  <div className="font-bold text-emerald-400 mt-0.5">{currentTest.resultStatus}</div>
-                </div>
-              </div>
-
-              {/* Resumen Forense del Ensayo */}
-              <div className="p-4 rounded-lg bg-black/50 border border-slate-800 text-xs text-slate-300 mb-6">
-                <strong className="text-white uppercase font-mono-tech block mb-1">
-                  DICTAMEN DE LABORATORIO:
-                </strong>
-                <p className="leading-relaxed">{currentTest.summary}</p>
-              </div>
-
-              {/* Botones de Control de la Simulación */}
-              <div className="flex flex-wrap items-center gap-4">
-                <button
-                  onClick={startSimulation}
-                  disabled={isRunningTest}
-                  className={`tactile-amber px-6 py-3 rounded text-xs font-bold tracking-wider uppercase flex items-center gap-2 cursor-pointer ${
-                    isRunningTest ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  <Play className="w-4 h-4 fill-current" />
-                  <span>{isRunningTest ? "SIMULANDO IMPACTO..." : "EJECUTAR ENSAYO EN TIEMPO REAL"}</span>
-                </button>
-
-                <button
-                  onClick={resetSimulation}
-                  disabled={isRunningTest}
-                  className="tactile-button px-4 py-3 rounded text-xs font-bold tracking-wider uppercase text-slate-400 hover:text-white flex items-center gap-2 cursor-pointer"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  <span>REINICIAR BANCO</span>
-                </button>
-              </div>
-
+          {/* Consola de Ensayo Limpia (8 Columnas) */}
+          <div className="lg:col-span-8 p-8 sm:p-10 rounded-2xl bg-[#101217] border border-white/[0.08] shadow-xl">
+            
+            <div className="flex flex-wrap items-center justify-between pb-4 border-b border-white/[0.08] gap-4 text-xs font-mono-tech">
+              <span className="text-slate-300 font-bold uppercase">LABORATORIO CERTIFICADO</span>
+              <span className="text-amber-500">{currentTest.standard}</span>
             </div>
+
+            {/* Simulación Visual Limpia */}
+            <div className="my-8 p-8 rounded-xl bg-black/50 border border-white/[0.06] flex flex-col items-center justify-center min-h-[180px] relative">
+              <div
+                className={`w-20 h-20 rounded-full border-2 flex items-center justify-center transition-all ${
+                  isRunningTest
+                    ? "border-rose-500 scale-105"
+                    : testCompleted
+                    ? "border-emerald-500"
+                    : "border-slate-700"
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 rounded-full ${
+                    isRunningTest
+                      ? "bg-rose-500 animate-ping"
+                      : testCompleted
+                      ? "bg-emerald-500"
+                      : "bg-amber-500"
+                  }`}
+                />
+              </div>
+
+              <div className="mt-4 text-xs font-mono-tech">
+                {isRunningTest ? (
+                  <span className="text-rose-400 font-bold">CARGA APLICADA: {testProgress}%</span>
+                ) : testCompleted ? (
+                  <span className="text-emerald-400 font-bold">DICTAMEN: PENETRACIÓN CERO (100% INTACTO)</span>
+                ) : (
+                  <span className="text-slate-400">SISTEMA EN ESPERA DE DISPARO</span>
+                )}
+              </div>
+
+              {/* Barra de Progreso */}
+              <div className="w-full h-1 bg-slate-800 rounded-full mt-5 overflow-hidden">
+                <div
+                  className="h-full bg-amber-500 transition-all duration-75"
+                  style={{ width: `${testProgress}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Datos Técnicos */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-xs font-mono-tech">
+              <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
+                <div className="text-[10px] text-slate-500 uppercase">AMENAZA</div>
+                <div className="text-white font-semibold mt-0.5 truncate">{currentTest.toolOrCaliber}</div>
+              </div>
+              <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
+                <div className="text-[10px] text-slate-500 uppercase">ENERGÍA</div>
+                <div className="text-amber-400 font-semibold mt-0.5">{currentTest.temperatureOrVelocity}</div>
+              </div>
+              <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
+                <div className="text-[10px] text-slate-500 uppercase">RESULTADO</div>
+                <div className="text-emerald-400 font-semibold mt-0.5">{currentTest.resultStatus}</div>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 font-sans">
+              {currentTest.summary}
+            </p>
+
+            {/* Botones de Control */}
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={startSimulation}
+                disabled={isRunningTest}
+                className={`tactile-amber px-5 py-2.5 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer ${
+                  isRunningTest ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>{isRunningTest ? "SIMULANDO..." : "EJECUTAR ENSAYO"}</span>
+              </button>
+
+              <button
+                onClick={resetSimulation}
+                disabled={isRunningTest}
+                className="px-4 py-2.5 rounded-md text-xs font-mono-tech text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all flex items-center gap-2 cursor-pointer bg-white/[0.02]"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>REINICIAR</span>
+              </button>
+            </div>
+
           </div>
 
         </div>

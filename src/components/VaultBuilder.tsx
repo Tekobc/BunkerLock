@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { ARMOR_TIERS, LOCK_MECHANISMS, FINISH_OPTIONS } from "@/data/doors";
 import { ArmorLevel, LockType, FinishType } from "@/types/bunker";
-import { Shield, Lock, Sliders, Check, Sparkles, Scale, Gauge, DollarSign, Send, ArrowRight, ShieldAlert, Cpu } from "lucide-react";
+import { Shield, Check, Sliders, ArrowRight, Send } from "lucide-react";
 import { playTactileClick, playBoltSlide } from "@/lib/sound";
 
 interface VaultBuilderProps {
@@ -16,9 +16,6 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
   const [selectedFinish, setSelectedFinish] = useState<FinishType>("brushed_steel");
   const [widthCm, setWidthCm] = useState<number>(95);
   const [heightCm, setHeightCm] = useState<number>(210);
-  const [thermalInsulation, setThermalInsulation] = useState<boolean>(true);
-  const [digitalPeephole, setDigitalPeephole] = useState<boolean>(true);
-  const [reinforcedSubframe, setReinforcedSubframe] = useState<boolean>(true);
 
   const activeTier = useMemo(
     () => ARMOR_TIERS.find((t) => t.level === selectedLevel) || ARMOR_TIERS[2],
@@ -33,7 +30,6 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
     [selectedFinish]
   );
 
-  // Cálculo en tiempo real de propiedades físicas y precio
   const calculatedSpecs = useMemo(() => {
     const areaM2 = (widthCm * heightCm) / 10000;
     const baseAreaM2 = (90 * 205) / 10000;
@@ -47,12 +43,8 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
     const basePrice = activeTier.basePriceUsd * areaMultiplier;
     const lockPrice = activeLock.priceDeltaUsd;
     const finishPrice = activeFinish.priceDeltaUsd;
-    const addOns =
-      (thermalInsulation ? 180 : 0) +
-      (digitalPeephole ? 240 : 0) +
-      (reinforcedSubframe ? 280 : 0);
 
-    const totalPriceUsd = Math.round(basePrice + lockPrice + finishPrice + addOns);
+    const totalPriceUsd = Math.round(basePrice + lockPrice + finishPrice);
 
     return {
       totalWeight,
@@ -61,16 +53,7 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
       resistanceMin: activeTier.attackResistanceMinutes,
       totalPriceUsd,
     };
-  }, [
-    activeTier,
-    activeLock,
-    activeFinish,
-    widthCm,
-    heightCm,
-    thermalInsulation,
-    digitalPeephole,
-    reinforcedSubframe,
-  ]);
+  }, [activeTier, activeLock, activeFinish, widthCm, heightCm]);
 
   const summaryString = useMemo(() => {
     return `BUNKERLOCK CONFIGURACIÓN: Nivel ${activeTier.level} (${activeTier.name}) | Cerradura: ${activeLock.name} | Acabado: ${activeFinish.name} | Medidas: ${widthCm}x${heightCm}cm | Peso: ${calculatedSpecs.totalWeight}kg | Estimado: USD $${calculatedSpecs.totalPriceUsd}`;
@@ -105,51 +88,43 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
   const sendWhatsApp = () => {
     playTactileClick();
     const text = encodeURIComponent(
-      `Hola BunkerLock, deseo cotizar la siguiente puerta acorazada personalizada:\n\n• ${summaryString}\n\n¿Podrían brindarme asesoramiento técnico y tiempo de entrega?`
+      `Hola BunkerLock, deseo cotizar una puerta acorazada personalizada:\n\n• ${summaryString}\n\n¿Podrían contactarme para coordinar medidas?`
     );
     window.open(`https://wa.me/5491100000000?text=${text}`, "_blank");
   };
 
   return (
-    <section id="configurador" className="relative py-24 bg-[#0d0f14] border-t border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="configurador" className="relative py-28 bg-[#0a0b0f] border-t border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
         
-        {/* Cabecera de la Sección */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-slate-800 pb-8">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono-tech text-xs uppercase mb-3">
-              <Sliders className="w-3.5 h-3.5" />
-              <span>CONFIGURADOR INDUSTRIAL INTERACTIVO</span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white font-heading">
-              DISEÑA TU BÓVEDA A MEDIDA
-            </h2>
-            <p className="mt-2 text-slate-400 max-w-xl text-sm sm:text-base">
-              Calibra el nivel de resistencia balística, sistema de cerrojos electromecánicos y acabados exteriores de ultra-lujo.
-            </p>
+        {/* Cabecera Limpia */}
+        <div className="max-w-2xl mb-16">
+          <div className="inline-flex items-center gap-2 text-xs font-mono-tech uppercase text-amber-500 mb-3">
+            <Sliders className="w-3.5 h-3.5" />
+            <span>CONFIGURADOR PERSONALIZADO</span>
           </div>
-
-          <div className="mt-6 md:mt-0 font-mono-tech text-xs text-slate-400 bg-[#141820] p-3 rounded border border-slate-700/60">
-            <span className="text-amber-500 font-bold">TELEMETRÍA EN VIVO:</span> CÁLCULO DE MASA Y TOLERANCIA DINÁMICO
-          </div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white font-heading">
+            DISEÑA TU BÓVEDA
+          </h2>
+          <p className="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
+            Personaliza el nivel de blindaje balístico, tecnología de control de acceso y acabado material con cálculo de especificaciones en tiempo real.
+          </p>
         </div>
 
-        {/* =========================================================
-            LAYOUT DEL CONSTRUCTOR (CONTROLES + DISPLAY HUD)
-           ========================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Layout en 2 Columnas Espaciosas */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
-          {/* COLUMNA IZQUIERDA: CONTROLES DE CONFIGURACIÓN (7 COLUMNAS) */}
-          <div className="lg:col-span-7 space-y-8">
+          {/* Columna de Selección (7 Columnas) */}
+          <div className="lg:col-span-7 space-y-10">
             
-            {/* PASO 1: Nivel de Blindaje */}
-            <div className="plate-raised p-5 sm:p-6 rounded-xl border border-slate-700/70">
+            {/* 1. Nivel de Blindaje */}
+            <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-mono-tech uppercase tracking-widest text-amber-500 font-bold flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4" /> PASO 1: NIVEL DE BLINDAJE &amp; RESISTENCIA
+                <span className="text-xs font-mono-tech uppercase font-bold text-slate-300">
+                  1. NIVEL DE BLINDAJE &bull; {activeTier.en1627Class}
                 </span>
-                <span className="text-xs font-mono-tech text-slate-400">
-                  {activeTier.en1627Class}
+                <span className="text-xs font-mono-tech text-amber-500 font-medium">
+                  {activeTier.ballisticRating}
                 </span>
               </div>
 
@@ -158,39 +133,30 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                   <button
                     key={tier.level}
                     onClick={() => handleSelectLevel(tier.level)}
-                    className={`p-3 rounded-lg border text-left transition-all relative ${
+                    className={`p-3.5 rounded-lg border text-left transition-all cursor-pointer ${
                       selectedLevel === tier.level
-                        ? "bg-gradient-to-b from-[#2a313d] to-[#1c222b] border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.25)]"
-                        : "bg-[#14171e] border-slate-700/80 hover:border-slate-500 text-slate-400"
+                        ? "bg-[#1f242d] border-amber-500 text-white shadow-sm"
+                        : "bg-[#111317] border-white/[0.08] text-slate-400 hover:border-white/20"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono-tech font-bold text-white">NIVEL {tier.level}</span>
-                      {selectedLevel === tier.level && (
-                        <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
-                      )}
+                    <div className="flex justify-between items-center text-xs font-mono-tech font-bold">
+                      <span>NIVEL {tier.level}</span>
+                      {selectedLevel === tier.level && <Check className="w-3.5 h-3.5 text-amber-400" />}
                     </div>
-                    <div className="text-[11px] font-bold text-slate-200 mt-1 truncate">{tier.name}</div>
-                    <div className="text-[10px] text-amber-400/90 font-mono-tech mt-1">{tier.ballisticRating.split("/")[0]}</div>
+                    <div className="text-xs font-bold text-slate-200 mt-1 truncate">{tier.name}</div>
                   </button>
                 ))}
               </div>
 
-              {/* Detalle del nivel seleccionado */}
-              <div className="mt-4 p-3.5 rounded bg-black/40 border border-slate-800 text-xs text-slate-300 space-y-1.5 font-mono-tech">
-                <div className="text-white font-bold">{activeTier.category} — {activeTier.code}</div>
-                <p className="text-slate-400 font-sans text-xs">{activeTier.description}</p>
-                <div className="grid grid-cols-2 gap-2 pt-2 text-[11px] text-slate-400 border-t border-slate-800">
-                  <div><strong>Núcleo:</strong> {activeTier.coreMaterial}</div>
-                  <div><strong>Placa anti-taladro:</strong> {activeTier.drillProofPlate}</div>
-                </div>
-              </div>
+              <p className="mt-3 text-xs text-slate-400 leading-relaxed font-sans">
+                {activeTier.description}
+              </p>
             </div>
 
-            {/* PASO 2: Tipo de Cerradura */}
-            <div className="plate-raised p-5 sm:p-6 rounded-xl border border-slate-700/70">
-              <span className="text-xs font-mono-tech uppercase tracking-widest text-amber-500 font-bold flex items-center gap-2 mb-4">
-                <Cpu className="w-4 h-4" /> PASO 2: SISTEMA DE CERROJOS Y CONTROL DE ACCESO
+            {/* 2. Sistema de Cerradura */}
+            <div>
+              <span className="block text-xs font-mono-tech uppercase font-bold text-slate-300 mb-4">
+                2. SISTEMA DE CERRADURA &bull; {activeLock.type}
               </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -198,30 +164,30 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                   <button
                     key={lock.id}
                     onClick={() => handleSelectLock(lock.id)}
-                    className={`p-4 rounded-lg border text-left transition-all ${
+                    className={`p-4 rounded-lg border text-left transition-all cursor-pointer ${
                       selectedLock === lock.id
-                        ? "bg-gradient-to-b from-[#2a313d] to-[#1c222b] border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.25)]"
-                        : "bg-[#14171e] border-slate-700/80 hover:border-slate-500 text-slate-400"
+                        ? "bg-[#1f242d] border-amber-500 text-white shadow-sm"
+                        : "bg-[#111317] border-white/[0.08] text-slate-400 hover:border-white/20"
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold text-white uppercase">{lock.name.split("&")[0]}</span>
-                      {selectedLock === lock.id && <Check className="w-4 h-4 text-amber-400" />}
+                    <div className="flex justify-between items-center text-xs font-bold text-white mb-1">
+                      <span>{lock.name.split("&")[0]}</span>
+                      {selectedLock === lock.id && <Check className="w-3.5 h-3.5 text-amber-400" />}
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono-tech mb-2">{lock.type}</div>
-                    <div className="text-[11px] text-amber-400 font-mono-tech font-bold">+USD ${lock.priceDeltaUsd}</div>
+                    <div className="text-[11px] text-amber-500 font-mono-tech font-medium">+USD ${lock.priceDeltaUsd}</div>
                   </button>
                 ))}
               </div>
-              <p className="mt-3 text-xs text-slate-400 font-mono-tech">
+
+              <p className="mt-3 text-xs text-slate-400 leading-relaxed font-sans">
                 {activeLock.description}
               </p>
             </div>
 
-            {/* PASO 3: Acabado Exterior */}
-            <div className="plate-raised p-5 sm:p-6 rounded-xl border border-slate-700/70">
-              <span className="text-xs font-mono-tech uppercase tracking-widest text-amber-500 font-bold flex items-center gap-2 mb-4">
-                <Sparkles className="w-4 h-4" /> PASO 3: REVESTIMIENTO Y ACABADO ESTÉTICO
+            {/* 3. Acabado Exterior */}
+            <div>
+              <span className="block text-xs font-mono-tech uppercase font-bold text-slate-300 mb-4">
+                3. REVESTIMIENTO EXTERIOR
               </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -229,37 +195,33 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                   <button
                     key={finish.id}
                     onClick={() => handleSelectFinish(finish.id)}
-                    className={`p-4 rounded-lg border text-left transition-all ${
+                    className={`p-4 rounded-lg border text-left transition-all cursor-pointer ${
                       selectedFinish === finish.id
-                        ? "bg-gradient-to-b from-[#2a313d] to-[#1c222b] border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.25)]"
-                        : "bg-[#14171e] border-slate-700/80 hover:border-slate-500 text-slate-400"
+                        ? "bg-[#1f242d] border-amber-500 text-white shadow-sm"
+                        : "bg-[#111317] border-white/[0.08] text-slate-400 hover:border-white/20"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-white">{finish.name}</span>
-                      {selectedFinish === finish.id && <Check className="w-4 h-4 text-amber-400" />}
+                    <div className="flex justify-between items-center text-xs font-bold text-white">
+                      <span>{finish.name}</span>
+                      {selectedFinish === finish.id && <Check className="w-3.5 h-3.5 text-amber-400" />}
                     </div>
                     <div className="text-[11px] text-slate-400 mt-1">{finish.visualClass}</div>
-                    <div className="text-[10px] text-amber-400 font-mono-tech mt-2">
-                      Garantía Anticorrosión: {finish.corrosionWarrantyYears} Años
-                    </div>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* PASO 4: Dimensiones y Opciones Técnicas */}
-            <div className="plate-raised p-5 sm:p-6 rounded-xl border border-slate-700/70 space-y-5">
-              <span className="text-xs font-mono-tech uppercase tracking-widest text-amber-500 font-bold flex items-center gap-2">
-                <Sliders className="w-4 h-4" /> PASO 4: CALIBRACIÓN DE VANO &amp; ACCESORIOS ESTRUCTURALES
+            {/* 4. Medidas */}
+            <div>
+              <span className="block text-xs font-mono-tech uppercase font-bold text-slate-300 mb-4">
+                4. DIMENSIONES DE VANO
               </span>
 
-              {/* Sliders de dimensiones */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-[#111317] p-5 rounded-lg border border-white/[0.08]">
                 <div>
-                  <div className="flex justify-between text-xs font-mono-tech mb-2">
-                    <span className="text-slate-300">ANCHO DE HOJA:</span>
-                    <span className="text-amber-400 font-bold">{widthCm} CM</span>
+                  <div className="flex justify-between text-xs font-mono-tech mb-2 text-slate-300">
+                    <span>ANCHO DE HOJA</span>
+                    <strong className="text-white">{widthCm} CM</strong>
                   </div>
                   <input
                     type="range"
@@ -269,16 +231,12 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                     onChange={(e) => setWidthCm(Number(e.target.value))}
                     className="w-full accent-amber-500 bg-slate-800 cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] font-mono-tech text-slate-500 mt-1">
-                    <span>80 cm (Estándar)</span>
-                    <span>130 cm (Extra Ancha)</span>
-                  </div>
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-xs font-mono-tech mb-2">
-                    <span className="text-slate-300">ALTO DE HOJA:</span>
-                    <span className="text-amber-400 font-bold">{heightCm} CM</span>
+                  <div className="flex justify-between text-xs font-mono-tech mb-2 text-slate-300">
+                    <span>ALTO DE HOJA</span>
+                    <strong className="text-white">{heightCm} CM</strong>
                   </div>
                   <input
                     type="range"
@@ -288,223 +246,93 @@ export default function VaultBuilder({ onSelectConfig }: VaultBuilderProps) {
                     onChange={(e) => setHeightCm(Number(e.target.value))}
                     className="w-full accent-amber-500 bg-slate-800 cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] font-mono-tech text-slate-500 mt-1">
-                    <span>200 cm</span>
-                    <span>250 cm (Piso a Techo)</span>
-                  </div>
                 </div>
-              </div>
-
-              {/* Toggles de accesorios adicionales */}
-              <div className="pt-4 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playTactileClick();
-                    setThermalInsulation(!thermalInsulation);
-                  }}
-                  className={`p-3 rounded border text-left text-xs font-mono-tech transition-all ${
-                    thermalInsulation
-                      ? "bg-amber-500/10 border-amber-500/60 text-white"
-                      : "bg-[#12151a] border-slate-800 text-slate-500"
-                  }`}
-                >
-                  <div className="flex items-center justify-between font-bold">
-                    <span>NÚCLEO IGNÍFUGO</span>
-                    <span>{thermalInsulation ? "[ON]" : "[OFF]"}</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400 mt-1">Lana de roca 120 min</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    playTactileClick();
-                    setDigitalPeephole(!digitalPeephole);
-                  }}
-                  className={`p-3 rounded border text-left text-xs font-mono-tech transition-all ${
-                    digitalPeephole
-                      ? "bg-amber-500/10 border-amber-500/60 text-white"
-                      : "bg-[#12151a] border-slate-800 text-slate-500"
-                  }`}
-                >
-                  <div className="flex items-center justify-between font-bold">
-                    <span>MIRILLA DIGITAL</span>
-                    <span>{digitalPeephole ? "[ON]" : "[OFF]"}</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400 mt-1">Visión nocturna IR</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    playTactileClick();
-                    setReinforcedSubframe(!reinforcedSubframe);
-                  }}
-                  className={`p-3 rounded border text-left text-xs font-mono-tech transition-all ${
-                    reinforcedSubframe
-                      ? "bg-amber-500/10 border-amber-500/60 text-white"
-                      : "bg-[#12151a] border-slate-800 text-slate-500"
-                  }`}
-                >
-                  <div className="flex items-center justify-between font-bold">
-                    <span>SUBCHASIS SÍSMICO</span>
-                    <span>{reinforcedSubframe ? "[ON]" : "[OFF]"}</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400 mt-1">Garras de acero 12mm</div>
-                </button>
               </div>
             </div>
+
           </div>
 
-          {/* COLUMNA DERECHA: HUD DE TELEMETRÍA FÍSICA & COTIZACIÓN EN VIVO (5 COLUMNAS) */}
-          <div className="lg:col-span-5 sticky top-28 space-y-6">
-            
-            {/* Panel Principal HUD */}
-            <div className="plate-raised p-6 rounded-xl border-2 border-slate-700 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-gradient-to-b from-[#181d24] via-[#12151b] to-[#0d0f13]">
+          {/* Columna de Resumen Limpia (5 Columnas) */}
+          <div className="lg:col-span-5 sticky top-28">
+            <div className="p-8 rounded-2xl bg-[#12141a] border border-white/10 shadow-xl space-y-6">
               
-              <div className="flex items-center justify-between pb-4 border-b border-slate-700/80">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]" />
-                  <span className="text-xs font-mono-tech uppercase font-bold text-white tracking-wider">
-                    COMPILADOR DE INGENIERÍA
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono-tech text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">
-                  TIEMPO REAL
+              <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+                <span className="text-xs font-mono-tech uppercase font-bold text-white tracking-wider">
+                  ESPECIFICACIÓN TÉCNICA
+                </span>
+                <span className="text-[10px] font-mono-tech text-amber-400 uppercase">
+                  {activeTier.en1627Class}
                 </span>
               </div>
 
-              {/* Visualización Esquema de Puerta Configurada */}
-              <div className="my-6 p-4 rounded-lg bg-black/60 border border-slate-800 flex items-center justify-center relative overflow-hidden">
-                <div
-                  className={`w-36 h-56 rounded border-2 transition-all flex flex-col justify-between p-3 relative ${
-                    selectedFinish === "brushed_steel"
-                      ? "bg-brushed-steel border-slate-400"
-                      : selectedFinish === "titanium_dark"
-                      ? "bg-titanium-dark border-slate-700"
-                      : selectedFinish === "armored_oak"
-                      ? "bg-amber-950/70 border-amber-800"
-                      : "bg-forged-iron border-slate-600"
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="rivet-screw" />
-                    <span className="w-3 h-3 rounded-full bg-cyan-400/80 shadow-[0_0_6px_#06b6d4]" />
-                    <span className="rivet-screw" />
-                  </div>
-
-                  {/* Detalle central de cerradura */}
-                  <div className="flex flex-col items-center">
-                    <div className="w-10 h-10 rounded-full bg-slate-900 border border-slate-500 flex items-center justify-center shadow-lg">
-                      <Lock className="w-4 h-4 text-amber-400" />
-                    </div>
-                    <span className="text-[8px] font-mono-tech text-white uppercase mt-1">
-                      {activeTier.code.split("-")[1]}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="rivet-screw" />
-                    <span className="text-[7px] font-mono-tech text-slate-400">
-                      {widthCm}x{heightCm}
-                    </span>
-                    <span className="rivet-screw" />
+              {/* Métricas Principales */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-3.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <div className="text-[10px] font-mono-tech text-slate-500 uppercase">PESO TOTAL</div>
+                  <div className="text-xl font-bold text-white font-mono-tech mt-0.5">
+                    {calculatedSpecs.totalWeight} KG
                   </div>
                 </div>
 
-                <div className="absolute right-3 top-3 text-right font-mono-tech text-[10px] text-slate-400 space-y-1">
-                  <div>NORM: <strong className="text-white">{activeTier.en1627Class}</strong></div>
-                  <div>BAL: <strong className="text-amber-400">{activeTier.ballisticRating.split("/")[0]}</strong></div>
-                  <div>PINS: <strong className="text-emerald-400">{calculatedSpecs.boltsCount}</strong></div>
+                <div className="p-3.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <div className="text-[10px] font-mono-tech text-slate-500 uppercase">GROSOR HOJA</div>
+                  <div className="text-xl font-bold text-white font-mono-tech mt-0.5">
+                    {calculatedSpecs.thicknessMm} MM
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <div className="text-[10px] font-mono-tech text-slate-500 uppercase">CERROJOS</div>
+                  <div className="text-xl font-bold text-amber-400 font-mono-tech mt-0.5">
+                    {calculatedSpecs.boltsCount} PINS
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <div className="text-[10px] font-mono-tech text-slate-500 uppercase">RESISTENCIA</div>
+                  <div className="text-xl font-bold text-emerald-400 font-mono-tech mt-0.5">
+                    +{calculatedSpecs.resistanceMin} MIN
+                  </div>
                 </div>
               </div>
 
-              {/* Métricas Físicas Clave */}
-              <div className="grid grid-cols-2 gap-3 mb-6 font-mono-tech text-xs">
-                <div className="plate-sunken p-3 rounded">
-                  <div className="flex items-center gap-1.5 text-slate-400 text-[10px] mb-1">
-                    <Scale className="w-3 h-3 text-amber-500" />
-                    <span>PESO ESTIMADO</span>
-                  </div>
-                  <div className="text-lg font-bold text-white">{calculatedSpecs.totalWeight} KG</div>
-                  <div className="text-[9px] text-slate-500">Masa de acero macizo</div>
+              {/* Precio Estimado */}
+              <div className="pt-2">
+                <div className="text-[11px] font-mono-tech text-slate-400 uppercase">
+                  PRESUPUESTO ESTIMADO
                 </div>
-
-                <div className="plate-sunken p-3 rounded">
-                  <div className="flex items-center gap-1.5 text-slate-400 text-[10px] mb-1">
-                    <Gauge className="w-3 h-3 text-amber-500" />
-                    <span>GROSOR DE HOJA</span>
-                  </div>
-                  <div className="text-lg font-bold text-white">{calculatedSpecs.thicknessMm} MM</div>
-                  <div className="text-[9px] text-slate-500">Multicapa compuesta</div>
+                <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono-tech mt-1">
+                  USD ${calculatedSpecs.totalPriceUsd.toLocaleString()}
                 </div>
-
-                <div className="plate-sunken p-3 rounded">
-                  <div className="flex items-center gap-1.5 text-slate-400 text-[10px] mb-1">
-                    <Lock className="w-3 h-3 text-amber-500" />
-                    <span>CERROJOS 22MM</span>
-                  </div>
-                  <div className="text-lg font-bold text-amber-400">{calculatedSpecs.boltsCount} PISTONES</div>
-                  <div className="text-[9px] text-slate-500">Acero cementado 64 HRC</div>
-                </div>
-
-                <div className="plate-sunken p-3 rounded">
-                  <div className="flex items-center gap-1.5 text-slate-400 text-[10px] mb-1">
-                    <Shield className="w-3 h-3 text-amber-500" />
-                    <span>RESISTENCIA ATAQUE</span>
-                  </div>
-                  <div className="text-lg font-bold text-emerald-400">+{calculatedSpecs.resistanceMin} MIN</div>
-                  <div className="text-[9px] text-slate-500">Ensayo efracción continuo</div>
-                </div>
-              </div>
-
-              {/* Bloque de Cotización Estimada */}
-              <div className="p-4 rounded-lg bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 mb-6">
-                <div className="text-[11px] font-mono-tech text-amber-400/90 uppercase tracking-widest font-bold">
-                  PRESUPUESTO ESTIMADO DE FABRICACIÓN
-                </div>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono-tech">
-                    USD ${calculatedSpecs.totalPriceUsd.toLocaleString()}
-                  </span>
-                  <span className="text-xs text-slate-400 font-mono-tech">+ IVA s/ Facturación</span>
-                </div>
-                <p className="text-[11px] text-slate-400 mt-2">
-                  Incluye fabricación a medida, herrajes de seguridad, tratamiento anticorrosivo y embalaje para transporte especializado.
+                <p className="text-xs text-slate-500 mt-1 font-mono-tech">
+                  Incluye herrajes de alta seguridad y fabricación a medida.
                 </p>
               </div>
 
               {/* Botones de Acción */}
-              <div className="space-y-3">
+              <div className="space-y-3 pt-2">
                 <button
                   onClick={dispatchToConsole}
-                  className="tactile-amber w-full py-3.5 rounded text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer"
+                  className="tactile-amber w-full py-3.5 rounded-md text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
-                  <span>TRANSFERIR A CONSOLA DE CONTACTO</span>
+                  <span>TRANSFERIR A CONTACTO</span>
                 </button>
 
                 <button
                   onClick={sendWhatsApp}
-                  className="tactile-button w-full py-3 rounded text-xs font-bold tracking-wider uppercase text-emerald-400 hover:text-emerald-300 flex items-center justify-center gap-2 border-emerald-500/40 cursor-pointer"
+                  className="w-full py-3 rounded-md text-xs font-bold tracking-wider uppercase text-slate-300 hover:text-white border border-white/10 hover:border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer bg-white/[0.02]"
                 >
-                  <span>SOLICITAR AUDITORÍA POR WHATSAPP</span>
+                  <span>CONSULTAR POR WHATSAPP</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            </div>
 
-            {/* Garantía de Fabricación */}
-            <div className="p-4 rounded-lg bg-[#11141a] border border-slate-800 text-xs text-slate-400 font-mono-tech flex items-center gap-3">
-              <Shield className="w-6 h-6 text-amber-500 shrink-0" />
-              <span>
-                <strong>GARANTÍA ESTRUCTURAL DE POR VIDA:</strong> Chasis garantizado contra deformación por ataque mecánico o torsión de vano.
-              </span>
             </div>
           </div>
 
         </div>
+
       </div>
     </section>
   );
