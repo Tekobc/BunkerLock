@@ -1,26 +1,307 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background-color: #0b0d10;
+    color: #e2e8f0;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono-tech {
+    font-family: var(--font-mono);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================
+   SKEUOMORPHIC & INDUSTRIAL TEXTURES / UTILITIES
+   ========================================================= */
+
+/* Acero Cepillado Horizontal */
+.bg-brushed-steel {
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(0, 0, 0, 0.05) 1px,
+      rgba(255, 255, 255, 0.02) 2px,
+      transparent 3px
+    ),
+    linear-gradient(
+      180deg,
+      #353b45 0%,
+      #262a32 30%,
+      #1f2329 50%,
+      #282c35 70%,
+      #1a1d22 100%
+    );
+}
+
+/* Acero Cepillado Claro / Cromado */
+.bg-brushed-chrome {
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.08) 0px,
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 2px
+    ),
+    linear-gradient(
+      180deg,
+      #94a3b8 0%,
+      #64748b 25%,
+      #cbd5e1 50%,
+      #475569 75%,
+      #334155 100%
+    );
+}
+
+/* Titanio Oscuro Antirreflectante */
+.bg-titanium-dark {
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.015) 0px,
+      rgba(0, 0, 0, 0.03) 2px,
+      transparent 4px
+    ),
+    linear-gradient(
+      145deg,
+      #1d2127 0%,
+      #14171b 40%,
+      #101215 100%
+    );
+}
+
+/* Chapa de Hierro Forjado Texturada */
+.bg-forged-iron {
+  background: 
+    radial-gradient(ellipse at top, #262a30 0%, #16181b 60%, #0d0f12 100%);
+}
+
+/* Panel Industrial Biselado Saliente */
+.plate-raised {
+  background: linear-gradient(145deg, #242930, #171a1e);
+  box-shadow: 
+    inset 1px 1px 1px rgba(255, 255, 255, 0.14),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.8),
+    0 8px 24px rgba(0, 0, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Panel Hundido / Cavidad Mecánica */
+.plate-sunken {
+  background: linear-gradient(145deg, #101215, #181b20);
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.9),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+/* Bisel de Precisión Mecánica en Botones */
+.tactile-button {
+  background: linear-gradient(180deg, #2f3540 0%, #1c2027 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.7),
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  border: 1px solid #3b4250;
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tactile-button:hover {
+  background: linear-gradient(180deg, #373e4a 0%, #222730 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.7),
+    0 6px 16px rgba(0, 0, 0, 0.6),
+    0 0 12px rgba(217, 119, 6, 0.25);
+  border-color: #f59e0b;
+}
+
+.tactile-button:active {
+  background: linear-gradient(180deg, #181c22 0%, #262c35 100%);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  transform: translateY(1px);
+}
+
+/* Botón de Alerta / Acento Ámbar Táctico */
+.tactile-amber {
+  background: linear-gradient(180deg, #f59e0b 0%, #b45309 80%, #78350f 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
+    0 4px 16px rgba(245, 158, 11, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  border: 1px solid #fbbf24;
+  color: #111418;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tactile-amber:hover {
+  background: linear-gradient(180deg, #fbbf24 0%, #d97706 80%, #92400e 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.7),
+    0 6px 22px rgba(245, 158, 11, 0.55);
+}
+
+.tactile-amber:active {
+  background: linear-gradient(180deg, #92400e 0%, #b45309 100%);
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  transform: translateY(1px);
+}
+
+/* Remache Industrial / Tornillo Allen Biselado */
+.rivet-screw {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #94a3b8 0%, #334155 70%, #1e293b 100%);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0, 0, 0, 0.7);
+  position: relative;
+  display: inline-block;
+}
+
+.rivet-screw::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 2px;
+  background: #0f172a;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%) rotate(42deg);
+}
+
+/* Indicador LED Táctico */
+.led-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 0 2px rgba(0, 0, 0, 0.9);
+  position: relative;
+}
+
+.led-green {
+  background: radial-gradient(circle at 30% 30%, #a7f3d0, #10b981 60%, #047857 100%);
+  box-shadow: 0 0 10px #10b981, 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.led-amber {
+  background: radial-gradient(circle at 30% 30%, #fef08a, #f59e0b 60%, #b45309 100%);
+  box-shadow: 0 0 10px #f59e0b, 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.led-red {
+  background: radial-gradient(circle at 30% 30%, #fecaca, #ef4444 60%, #b91c1c 100%);
+  box-shadow: 0 0 10px #ef4444, 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Tiras de Advertencia Industrial */
+.hazard-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    #0d0f12,
+    #0d0f12 12px,
+    #d97706 12px,
+    #d97706 24px
+  );
+}
+
+/* Patrón Moleteado de Sujeción (Knurling) */
+.knurl-pattern {
+  background-image: 
+    radial-gradient(#475569 15%, transparent 16%),
+    radial-gradient(#1e293b 15%, transparent 16%);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+/* Bisel de esquina fresado (Chamfered edge) */
+.chamfer-clip {
+  clip-path: polygon(
+    12px 0%, 
+    calc(100% - 12px) 0%, 
+    100% 12px, 
+    100% calc(100% - 12px), 
+    calc(100% - 12px) 100%, 
+    12px 100%, 
+    0% calc(100% - 12px), 
+    0% 12px
+  );
+}
+
+/* Efecto de resplandor metálico al scroll o foco */
+.specular-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.specular-shine::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 58%
+  );
+  pointer-events: none;
+  transition: transform 0.8s ease;
+}
+
+.specular-shine:hover::before {
+  transform: translate(25%, 25%);
+}
+
+/* Scrollbar industrial de titanio */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0f13;
+  border-left: 1px solid #1a1e24;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2a2f38 0%, #1c2026 100%);
+  border: 1px solid #3d4450;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #3a414e 0%, #252b34 100%);
+  border-color: #f59e0b;
 }
