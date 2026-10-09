@@ -12,9 +12,15 @@ graph TD
         Page --> Hero[components/HeroVault.tsx]
         Page --> Builder[components/VaultBuilder.tsx]
         Page --> Anatomy[components/AnatomyScroll.tsx]
-        Page --> Simulator[components/ResistanceSimulator.tsx]
         Page --> Ironwork[components/IronworkCatalog.tsx]
+        Page --> Simulator[components/ResistanceSimulator.tsx]
         Page --> Console[components/IndustrialConsole.tsx]
+    end
+
+    subgraph State_Integration [Integración y Flujo de Datos]
+        Builder -.->|Handoff de Configuración| Page
+        Ironwork -.->|Selección de Modelo| Page
+        Page -.->|Prefilled Specs| Console
     end
 
     subgraph Interactive_Systems [Sistemas Interactivos y Audio]
@@ -22,7 +28,7 @@ graph TD
         SoundEngine --> Builder
         SoundEngine --> Simulator
         SoundEngine --> Console
-        SoundEngine --> AudioToggle[components/AudioToggle.tsx]
+        SoundEngine --> AppHeader
     end
 
     subgraph Data_Models [Modelos de Datos y Especificaciones]
@@ -36,7 +42,7 @@ graph TD
     subgraph Styling_Engine [Dirección de Arte Skeuomórfica]
         GlobalsCSS[app/globals.css] -.-> UI_Shell
         GlobalsCSS -.-> Core_Sections
-        NoiseTexture[SVG & CSS Noise / Metal Gradients] -.-> GlobalsCSS
+        SkeuoUtilities[Biselado, Acero Cepillado, Titanio, Remaches, Luces LED] -.-> GlobalsCSS
     end
 ```
 
@@ -44,14 +50,19 @@ graph TD
 
 | Módulo / Archivo | Responsabilidad | Dependencias Principales | Estado |
 | :--- | :--- | :--- | :--- |
-| `app/globals.css` | Design System Skeuomórfico (acero cepillado, titanio, biseles, remaches, reflejos) | Tailwind CSS v4 | En desarrollo |
-| `lib/sound.ts` | Motor de audio táctil sintetizado mediante Web Audio API (latches, clicks, alarmas, pernos) | Web Audio API nativo | Planificado |
-| `types/bunker.ts` | Tipos TypeScript de blindaje, cerraduras, herrería y presupuestación | TypeScript | Planificado |
-| `components/Navbar.tsx` | Barra de estado industrial táctil con status LED y acceso rápido | Lucide, Sound | Planificado |
-| `components/HeroVault.tsx` | "La Cámara de Seguridad": Puerta interactiva con cerrojos mecánicos móviles | Framer Motion, Sound | Planificado |
-| `components/VaultBuilder.tsx` | Configurador interactivo con cálculo de peso, grosor y presupuesto en tiempo real | Types, Sound | Planificado |
-| `components/AnatomyScroll.tsx` | Desglose anatómico scrollytelling de las 5 capas de blindaje | Framer Motion | Planificado |
-| `components/ResistanceSimulator.tsx` | Simulador interactivo de impacto balístico, radial y fuego | Sound, Testing Data | Planificado |
-| `components/IronworkCatalog.tsx` | Catálogo táctil de herrería pesada de alta precisión | Iron Data | Planificado |
-| `components/IndustrialConsole.tsx` | Consola de control industrial para contacto y cotización instantánea | Sound, Types | Planificado |
-| `components/Footer.tsx` | Sellos normativos, garantía de por vida y especificaciones técnicas | Lucide | Planificado |
+| `app/globals.css` | Design System Skeuomórfico (acero cepillado, titanio, biseles, remaches, reflejos, tiras de peligro) | Tailwind CSS v4 | **Completado** |
+| `app/layout.tsx` | Fuentes industriales Google (`Space Grotesk`, `Inter`, `JetBrains Mono`) y metadatos SEO | Next.js Metadata | **Completado** |
+| `lib/sound.ts` | Motor de audio táctil sintetizado con Web Audio API nativo (latches, pernos, clics, scans) | Web Audio API | **Completado** |
+| `types/bunker.ts` | Modelos de datos TypeScript de blindaje, cerraduras, acabados y ensayos | TypeScript | **Completado** |
+| `data/doors.ts` | Especificaciones de 5 niveles de blindaje, 3 cerraduras y 4 acabados exteriores | Types | **Completado** |
+| `data/ironwork.ts` | Catálogo de portones acorazados, rejas de forja maciza y habitaciones de pánico | Types | **Completado** |
+| `data/testing.ts` | Ensayos de laboratorio (balística 7.62 NATO, amoladora 230mm, presión hidráulica, fuego EI 120) | Types | **Completado** |
+| `components/Navbar.tsx` | Barra de estado industrial táctil con status LED, telemetría y audio toggle | Lucide, Sound | **Completado** |
+| `components/HeroVault.tsx` | "La Cámara de Seguridad": Puerta interactiva con cerrojos físicos y volante de bóveda accionable | Sound | **Completado** |
+| `components/VaultBuilder.tsx` | Configurador interactivo con cálculo de peso, grosor y presupuesto en tiempo real | Types, Doors Data, Sound | **Completado** |
+| `components/AnatomyScroll.tsx` | Desglose anatómico por capas del sándwich balístico | Sound | **Completado** |
+| `components/IronworkCatalog.tsx` | Catálogo táctil de herrería pesada con filtros interactivos | Ironwork Data, Sound | **Completado** |
+| `components/ResistanceSimulator.tsx` | Simulador interactivo de impacto balístico, deformación y fuego con dictamen | Testing Data, Sound | **Completado** |
+| `components/IndustrialConsole.tsx` | Consola industrial de cotización y despacho directo por WhatsApp | Sound | **Completado** |
+| `components/Footer.tsx` | Sellos de certificación (EN 1627, RB3), garantía estructural y planta industrial | Lucide, Sound | **Completado** |
+| `app/page.tsx` | Orquestación central de módulos y enlace de estado entre configurador y consola | Componentes Core | **Completado** |
